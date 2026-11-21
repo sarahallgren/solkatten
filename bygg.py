@@ -157,7 +157,7 @@ SIDFOT = f'''<footer class="sidfot">
       <div>
         <h2 class="fot-rubrik">Kontakt</h2>
         <ul>
-          <li><a href="mailto:solkatten@solkattenskelleftea.se">solkatten@solkattenskelleftea.se</a></li>
+          <li><a href="mailto:solkatten@solkattenskelleftea.se">solkatten<wbr>@solkattenskelleftea.se</a></li>
           <li>Bankgiro 5083-2054</li>
           <li>BIC SWEDSESS</li>
           <li><a href="/kontakt/">Vem ska ha vad?</a></li>

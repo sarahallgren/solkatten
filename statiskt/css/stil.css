@@ -116,12 +116,12 @@ li{margin:.3em 0}
 .pagang .kort h3{font-size:1.2rem}
 
 /* ---------- Sidfot ---------- */
-.sidfot{background:var(--mork);color:#E7E5E1;padding:64px 0 40px;margin-top:40px}
-.sidfot-kolumner{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px}
+.sidfot{background:var(--mork);color:#E7E5E1;padding:64px 0 40px;margin-top:40px;font-size:1rem}
+.sidfot-kolumner{display:grid;grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,1fr));gap:32px}
 .fot-rubrik{font-family:var(--brod);font-stretch:100%;font-variation-settings:normal;font-size:.95rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gul);margin:0 0 20px}
 .sidfot ul{list-style:none;padding:0;margin:0;line-height:2.2}
 .sidfot li{margin:0}
-.sidfot a{color:var(--vit);text-decoration:underline;text-decoration-color:var(--gul);text-decoration-thickness:2px;text-underline-offset:6px}
+.sidfot a{color:var(--vit);text-decoration:underline;text-decoration-color:var(--gul);text-decoration-thickness:2px;text-underline-offset:6px;overflow-wrap:anywhere}
 .sidfot a:hover{color:var(--gul)}
 .sidfot :focus-visible{outline-color:var(--gul);box-shadow:none}
 .logorutor{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(10rem,1fr));gap:16px}
