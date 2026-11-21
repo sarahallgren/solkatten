@@ -92,7 +92,7 @@ li{margin:.3em 0}
 .kort-lank :is(h2,h3) a:focus{outline:none;box-shadow:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}.kort-lank:hover{transform:none}}
 
-.tva-kolumner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:48px;align-items:center;max-width:960px}
+.tva-kolumner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:48px;align-items:center}
 .rund-bild{border-radius:50%;aspect-ratio:1;object-fit:cover;width:220px;max-width:100%;justify-self:center;background:var(--ljus)}
 .gul-ruta{background:var(--gul);color:var(--mork);border-radius:24px;padding:40px;display:grid;grid-template-columns:2fr 1fr;gap:32px;align-items:center}
 .gul-ruta h2{margin-top:0}
