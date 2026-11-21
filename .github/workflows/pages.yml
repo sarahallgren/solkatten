@@ -25,11 +25,12 @@ jobs:
         run: |
           python bygg.py
           rm -rf webbplats && cp -r dist webbplats
+          rm -rf medlemssida && cp -r dist-medlemssida medlemssida
       - name: Spara bilder och färdig webbplats i repot
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add statiskt/bilder statiskt/fonter webbplats
+          git add statiskt/bilder statiskt/fonter webbplats medlemssida
           if git diff --cached --quiet; then echo "Inget nytt att spara"; else git commit -m "Uppdatera färdig webbplats och bilder [skip ci]" && git push; fi
       - name: Bygg förhandsvisningen (GitHub Pages)
         run: BAS="/${{ github.event.repository.name }}" python bygg.py

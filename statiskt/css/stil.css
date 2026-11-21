@@ -168,3 +168,14 @@ li{margin:.3em 0}
   html{scroll-padding-top:110px}
 }
 @media (prefers-reduced-motion:reduce){.sidhuvud{transition:none}}
+
+/* ---------- Medlemsrabatter ---------- */
+.formaner{list-style:none;padding:0;margin:0 0 48px;display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:16px}
+.forman{border:2px solid var(--kant);border-radius:16px;padding:20px 24px;background:var(--vit);display:flex;flex-direction:column;gap:6px}
+.forman h3{font-size:1.6rem;margin:0}
+.forman p{margin:0}
+.forman-rabatt{font-weight:700}
+.forman-villkor{color:var(--dampad);font-size:1rem}
+.forman-kod{font-family:ui-monospace,Consolas,monospace;font-size:1.25rem;font-weight:700;background:var(--ljus);border:2px dashed var(--gul);border-radius:8px;padding:6px 12px;align-self:flex-start;user-select:all}
+.tagg{align-self:flex-start;margin-top:6px!important;background:var(--gul);color:var(--mork);font-size:.9rem;font-weight:700;border-radius:999px;padding:2px 12px}
+.sida-text .formaner{max-width:none}

@@ -72,22 +72,27 @@ Glöm inte den dolda filen `.htaccess` – den sköter omdirigeringar från de g
 
 Inställningar för SFTP finns i one.com:s kontrollpanel under *SSH & SFTP*.
 
-## Medlemsrabatter (lösenordsskydd)
+## Medlemsrabatter och rabattkoder (lösenordsskydd)
 
-Sidan `/medlem/medlemsrabatter/` ska skyddas med lösenord **på servern**. Lösenord i JavaScript är inget riktigt skydd.
-Sidan syns inte i menyn, i Google eller i webbplatskartan, men den är **inte** skyddad förrän stegen nedan är gjorda.
+- **`/medlem/medlemsrabatter/`** är öppen för alla. Den visar förmånerna men **inga koder**.
+- **`/medlem/rabattkoder/`** är lösenordsskyddad på servern. Där finns koderna och medlemskortet.
+  Utan lösenord skickar servern inte sidan alls, så koderna syns inte i F12.
 
-1. Skapa lösenordsfilen `.htpasswd` (användare `medlem`), till exempel med en htpasswd-generator.
-   Lägg den **utanför** webbplatsens mappar om one.com tillåter det.
-2. Lägg en fil `.htaccess` i `dist/medlem/medlemsrabatter/` efter bygget:
-   ```
-   AuthType Basic
-   AuthName "Solkattens medlemssida"
-   AuthUserFile /FULLSTÄNDIG/SÖKVÄG/TILL/.htpasswd
-   Require valid-user
-   ```
-   Den fullständiga sökvägen får du av one.com:s support.
-3. Byt lösenord varje år den 1 januari och skicka det nya till medlemmarna.
+**Koderna får aldrig skrivas in i GitHub.** Repot är öppet för alla. I GitHub står bara `SKRIV-KODEN-HÄR`.
+
+### Första gången (på one.com)
+1. Ladda upp innehållet i mappen `medlemssida/` till webbplatsens rot, så att filerna hamnar i `medlem/rabattkoder/`.
+2. Öppna **File Manager** i one.com:s kontrollpanel och gå till mappen `medlem/rabattkoder`.
+3. Klicka på pilen bredvid **+ Upload** och välj **Secure directory**.
+4. Markera filen **.htpasswd**, klicka på den stora filikonen till höger och skriv användarnamn (till exempel `medlem`) och lösenord. Spara.
+5. Öppna `medlem/rabattkoder/index.html` i File Manager, byt ut `SKRIV-KODEN-HÄR` mot de riktiga koderna och spara.
+6. Testa: öppna solkattenskelleftea.se/medlem/rabattkoder/ i ett privat fönster. En inloggningsruta ska visas.
+
+### Sedan
+- **Ny kod:** ändra direkt i `medlem/rabattkoder/index.html` på one.com.
+- **Ladda inte upp `medlemssida/` igen**, då skrivs de riktiga koderna över. (Mappen `webbplats/` påverkar inte den skyddade sidan.)
+- **Nytt medlemsår:** byt lösenord i `.htpasswd` och skapa ett nytt kort: `python3 verktyg/medlemskort.py 2028`.
+  Ladda upp den nya PDF:en till `medlem/rabattkoder/` och ändra årtalet i länken på sidan.
 
 ## Vid lanseringen
 

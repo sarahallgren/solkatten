@@ -24,6 +24,8 @@ import os, re, shutil, datetime, html
 ROT = os.path.dirname(os.path.abspath(__file__))
 INN = os.path.join(ROT, 'innehall')
 DIST = os.path.join(ROT, 'dist')
+# Den lösenordsskyddade medlemssidan byggs separat, så att den aldrig skrivs över på servern
+DIST_MEDLEM = os.path.join(ROT, 'dist-medlemssida')
 DOMAN = 'https://solkattenskelleftea.se'
 KLUBB = 'Solkatten Skellefteå kattklubb'
 IDAG = datetime.date.today()
@@ -146,7 +148,7 @@ SIDFOT = f'''<footer class="sidfot">
         <h2 class="fot-rubrik">Snabblänkar</h2>
         <ul>
           <li><a href="/medlem/bli-medlem/">Bli medlem</a></li>
-          <li><a href="/medlem/medlemsrabatter/">Logga in</a></li>
+          <li><a href="/medlem/rabattkoder/">Logga in för medlemmar</a></li>
           <li><a href="https://www.sverak.se/avel-och-uppfodning/stambokfor-kattkull/">Stambokför kattkull</a></li>
           <li><a href="https://www.sverak.se/avel-och-uppfodning/agarandring-i-sveraks-stambok/">Ägarändra katt</a></li>
           <li><a href="https://www.sverak.se/faq/">Frågor och svar</a></li>
@@ -355,7 +357,29 @@ def main():
             f.write(f'  <url><loc>{DOMAN}{u}</loc><lastmod>{IDAG.isoformat()}</lastmod></url>\n')
         f.write('</urlset>\n')
     with open(os.path.join(DIST, 'robots.txt'), 'w', encoding='utf-8') as f:
-        f.write(f'User-agent: *\nDisallow: /medlem/medlemsrabatter/\n\nSitemap: {DOMAN}/sitemap.xml\n')
+        f.write(f'User-agent: *\nDisallow: /medlem/rabattkoder/\n\nSitemap: {DOMAN}/sitemap.xml\n')
+
+    # Lösenordsskyddad medlemssida (läggs i egen mapp, laddas upp separat till /medlem/rabattkoder/)
+    if not BAS and not FORHANDSVISNING:
+        fil = os.path.join(INN, 'medlemssida', 'rabattkoder.html')
+        if os.path.exists(fil):
+            mm, mhtml = las(fil)
+            if os.path.exists(DIST_MEDLEM):
+                shutil.rmtree(DIST_MEDLEM)
+            mal = os.path.join(DIST_MEDLEM, 'medlem', 'rabattkoder')
+            os.makedirs(mal)
+            kropp = f'''<div class="bredd sida">
+{brodsmulor([("Hem", "/"), ("Medlem", "/medlem/"), (mm["titel"], "/medlem/rabattkoder/")])}
+<div class="sida-text">
+<h1>{mm["titel"]}</h1>
+{mhtml}
+</div>
+</div>'''
+            with open(os.path.join(mal, 'index.html'), 'w', encoding='utf-8') as f:
+                f.write(skal(mm['titel'], mm['beskrivning'], kropp, '/medlem/rabattkoder/', avd, noindex=True))
+            for pdf in os.listdir(os.path.join(ROT, 'medlemskort')):
+                if pdf.endswith('.pdf'):
+                    shutil.copy(os.path.join(ROT, 'medlemskort', pdf), mal)
 
     if BAS or FORHANDSVISNING:
         for d, _, fs in os.walk(DIST):
