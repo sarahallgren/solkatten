@@ -27,4 +27,11 @@
     });
     if (knapp) knapp.focus();
   });
+  // Sidhuvudet får vit bakgrund och skugga när man har scrollat
+  var huvud = document.querySelector('.sidhuvud');
+  if (huvud) {
+    var kolla = function () { huvud.classList.toggle('rullad', window.scrollY > 20); };
+    window.addEventListener('scroll', kolla, { passive: true });
+    kolla();
+  }
 })();
