@@ -1,19 +1,18 @@
-# Bygger förhandsvisningen och lägger ut den på GitHub Pages vid varje ändring.
-name: Förhandsvisning på GitHub Pages
+# Hämtar bilder, bygger den färdiga webbplatsen till mappen webbplats/ och sparar den i repot.
+# Lägger också ut en förhandsvisning på GitHub Pages.
+name: Bygg webbplatsen
 on:
   push:
     branches: [main]
   workflow_dispatch:
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: bygg
+  cancel-in-progress: false
 jobs:
   bygg:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -21,8 +20,18 @@ jobs:
           python-version: '3.12'
       - name: Hämta bilder och typsnitt om de saknas
         run: |
-          if [ ! -f statiskt/bilder/katt-hero.jpg ]; then sh hamta-bilder.sh; fi
-      - name: Bygg sidan
+          if [ ! -f statiskt/bilder/katt-hero.jpg ] || [ ! -f statiskt/fonter/manrope.woff2 ]; then sh hamta-bilder.sh; fi
+      - name: Bygg den färdiga webbplatsen (för one.com)
+        run: |
+          python bygg.py
+          rm -rf webbplats && cp -r dist webbplats
+      - name: Spara bilder och färdig webbplats i repot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add statiskt/bilder statiskt/fonter webbplats
+          if git diff --cached --quiet; then echo "Inget nytt att spara"; else git commit -m "Uppdatera färdig webbplats och bilder [skip ci]" && git push; fi
+      - name: Bygg förhandsvisningen (GitHub Pages)
         run: BAS="/${{ github.event.repository.name }}" python bygg.py
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -30,6 +39,9 @@ jobs:
   publicera:
     needs: bygg
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}

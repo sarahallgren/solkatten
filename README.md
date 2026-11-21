@@ -3,7 +3,14 @@
 Statisk HTML-webbplats för solkattenskelleftea.se. Inga databaser, inga tillägg, inget att uppdatera.
 Webbansvarig skriver in texterna som styrelsen skickar, bygger om sidan och laddar upp den.
 
-## Första gången
+## Den färdiga webbplatsen
+
+Mappen **`webbplats/`** är den färdiga sidan med alla bilder. Den byggs automatiskt på GitHub varje gång något ändras.
+Det är **innehållet i den mappen** som laddas upp till one.com. Du behöver inte köra något själv.
+
+Förhandsvisning: https://sarahallgren.github.io/solkatten/
+
+## Bygga på egen dator (valfritt)
 
 1. **Hämta bilder och typsnitt** (bara en gång, medan WordPress-testsidan ny.solkattenskelleftea.se finns kvar):
    - Windows: högerklicka på `hamta-bilder.ps1` → *Kör med PowerShell*
@@ -60,7 +67,7 @@ Lägg bilden i `statiskt/bilder/` och ändra listan under *Samarbeten* i `bygg.p
 
 ## Ladda upp till one.com
 
-Ladda upp **innehållet** i `dist/` (inte själva mappen) till webbplatsens rotmapp, med SFTP eller one.com:s filhanterare.
+Ladda upp **innehållet** i `webbplats/` (inte själva mappen) till webbplatsens rotmapp, med SFTP eller one.com:s filhanterare.
 Glöm inte den dolda filen `.htaccess` – den sköter omdirigeringar från de gamla adresserna, https och felsidan.
 
 Inställningar för SFTP finns i one.com:s kontrollpanel under *SSH & SFTP*.
@@ -85,7 +92,7 @@ Sidan syns inte i menyn, i Google eller i webbplatskartan, men den är **inte** 
 ## Vid lanseringen
 
 - [ ] Kör `hamta-bilder` och bygg sidan en sista gång
-- [ ] Ladda upp `dist/` inklusive `.htaccess` till solkattenskelleftea.se
+- [ ] Ladda upp innehållet i `webbplats/` inklusive `.htaccess` till solkattenskelleftea.se
 - [ ] Testa några gamla adresser, t.ex. `/Medlemskap/` och `/Solkatten/Styrelse` – de ska leda till de nya sidorna
 - [ ] Skicka in `https://solkattenskelleftea.se/sitemap.xml` i Google Search Console
 - [ ] Skydda medlemsrabatterna (se ovan)
