@@ -96,6 +96,7 @@ Inställningar för SFTP finns i one.com:s kontrollpanel under *SSH & SFTP*.
 
 ## Vid lanseringen
 
+- [ ] **Öppna för Google:** ändra `OPPEN_FOR_GOOGLE = False` till `True` i `bygg.py` (annars försvinner sidan ur Google när den gamla byts ut)
 - [ ] Kör `hamta-bilder` och bygg sidan en sista gång
 - [ ] Ladda upp innehållet i `webbplats/` inklusive `.htaccess` till solkattenskelleftea.se
 - [ ] Testa några gamla adresser, t.ex. `/Medlemskap/` och `/Solkatten/Styrelse` – de ska leda till de nya sidorna

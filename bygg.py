@@ -32,7 +32,9 @@ IDAG = datetime.date.today()
 # För förhandsvisning på GitHub Pages: BAS=/solkatten python3 bygg.py
 # BAS läggs före alla interna länkar. Förhandsvisningen stängs ute från Google.
 BAS = os.environ.get('BAS', '').rstrip('/')
-FORHANDSVISNING = bool(BAS) or os.environ.get('FORHANDSVISNING') == '1'
+# Stängd för Google tills lanseringen. Ändra till True den dag sidan ska bli sökbar.
+OPPEN_FOR_GOOGLE = False
+FORHANDSVISNING = bool(BAS) or os.environ.get('FORHANDSVISNING') == '1' or not OPPEN_FOR_GOOGLE
 
 # Menyns huvudval i ordning. 'typ': sida = mapp under innehall/sidor, lank = fast länk
 MENY = [
@@ -360,7 +362,7 @@ def main():
         f.write(f'User-agent: *\nDisallow: /medlem/rabattkoder/\n\nSitemap: {DOMAN}/sitemap.xml\n')
 
     # Lösenordsskyddad medlemssida (läggs i egen mapp, laddas upp separat till /medlem/rabattkoder/)
-    if not BAS and not FORHANDSVISNING:
+    if not BAS:
         fil = os.path.join(INN, 'medlemssida', 'rabattkoder.html')
         if os.path.exists(fil):
             mm, mhtml = las(fil)
@@ -396,7 +398,7 @@ def main():
                 open(fp, 'w', encoding='utf-8').write(t)
         with open(os.path.join(DIST, 'robots.txt'), 'w', encoding='utf-8') as f:
             f.write('User-agent: *\nDisallow: /\n')
-        print(f'Förhandsvisning: länkar börjar med "{BAS or "/"}" och sidan är dold för Google.')
+        print(f'Länkar börjar med "{BAS or "/"}". Sidan är stängd för Google (noindex och robots.txt).')
     print(f'Klart! {len(sitemap)} sidor i sitemap, {len(nyheter)} nyheter, {len(kommande)} kommande aktiviteter.')
     print('Webbplatsen ligger i mappen dist/')
 
