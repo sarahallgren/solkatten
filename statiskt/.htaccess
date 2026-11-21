@@ -21,7 +21,7 @@ RewriteRule ^Solkatten/?$                     /om-klubben/om-solkatten/         
 RewriteRule ^Solkatten/Styrelse/?$            /om-klubben/styrelse/                [R=301,NC,L]
 RewriteRule ^Solkatten/vemskahavad/?$         /kontakt/                            [R=301,NC,L]
 RewriteRule ^Medlemskap/?$                    /medlem/bli-medlem/                  [R=301,NC,L]
-RewriteRule ^Medlemskap/aktiviteter/?$        /aktiviteter/                        [R=301,NC,L]
+RewriteRule ^Medlemskap/aktiviteter/?$        /nyheter/                            [R=301,NC,L]
 RewriteRule ^medlemssida/?$                   /medlem/medlemsrabatter/             [R=301,NC,L]
 RewriteRule ^Uppfödning/?$                    /medlem/ansoka-om/                   [R=301,NC,L]
 RewriteRule ^Uppfödning/Uppfödare/?$          /skaffa-katt/vara-uppfodare/         [R=301,NC,L]
@@ -39,7 +39,8 @@ RewriteRule ^rsm-te-sverak/?$                 /medlem/motion-till-sveraks-arsmot
 RewriteRule ^klubbm-sterskap-2026(/.*)?$      /utstallning/klubbmasterskap/        [R=301,NC,L]
 
 # Adresser från WordPress-testsidan
-RewriteRule ^category/aktiviteter/?$          /aktiviteter/                        [R=301,NC,L]
+RewriteRule ^category/aktiviteter/?$          /nyheter/                            [R=301,NC,L]
+RewriteRule ^aktiviteter(/.*)?$                /nyheter/                            [R=301,NC,L]
 RewriteRule ^category/nyheter/?$              /nyheter/                            [R=301,NC,L]
 
 # Lägg till snedstreck sist om det saknas (/kontakt -> /kontakt/)

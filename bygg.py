@@ -10,7 +10,7 @@ Innehållet ligger i mappen innehall/:
   sidor/<avdelning>/index.html   huvudsidorna (Skaffa katt, Kattfakta ...)
   sidor/<avdelning>/<sida>.html  undersidorna
   nyheter/ÅÅÅÅ-MM-DD-namn.html   nyheter
-  aktiviteter/ÅÅÅÅ-MM-DD-namn.html  aktiviteter (visas tills datumet passerat)
+                                 (lägg till  när: ÅÅÅÅ-MM-DD  och  plats:  för något som ska hända)
 
 Varje fil börjar med en informationsruta:
   <!--
@@ -41,9 +41,9 @@ MENY = [
     {'typ': 'sida', 'namn': 'skaffa-katt'},
     {'typ': 'sida', 'namn': 'kattfakta'},
     {'typ': 'sida', 'namn': 'utstallning'},
-    {'typ': 'lank', 'titel': 'Aktiviteter', 'url': '/aktiviteter/'},
+    {'typ': 'lank', 'titel': 'Nyheter', 'url': '/nyheter/'},
     {'typ': 'sida', 'namn': 'medlem'},
-    {'typ': 'sida', 'namn': 'om-klubben', 'extra': [('Nyheter', '/nyheter/')]},
+    {'typ': 'sida', 'namn': 'om-klubben'},
 ]
 
 # ------------------------------------------------------------------ läs innehåll
@@ -84,12 +84,23 @@ def inlagg(mapp, prefix):
         meta, inneh = las(os.path.join(p, f))
         slug = re.sub(r'^\d{4}-\d{2}-\d{2}-', '', f[:-5])
         datum = datetime.date.fromisoformat(meta['datum'])
-        ut.append({'slug': slug, 'url': f'/{prefix}/{slug}/', 'meta': meta, 'html': inneh, 'datum': datum})
+        nar = datetime.date.fromisoformat(meta['när']) if meta.get('när') else None
+        ut.append({'slug': slug, 'url': f'/{prefix}/{slug}/', 'meta': meta, 'html': inneh, 'datum': datum, 'nar': nar})
     return ut
 
 MANADER = ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december']
 def svdatum(d):
     return f'{d.day} {MANADER[d.month - 1]} {d.year}'
+
+def datumrad(n):
+    """Datumraden på ett nyhetskort: när det händer, annars när nyheten publicerades."""
+    if n['nar']:
+        plats = f' · {n["meta"]["plats"]}' if n['meta'].get('plats') else ''
+        return f'<span class="datum"><strong>När:</strong> {svdatum(n["nar"])}{plats}</span>'
+    return f'<span class="datum">{svdatum(n["datum"])}</span>'
+
+def nyhetskort(n, niva='h2'):
+    return kort(n['meta']['titel'], n['url'], f'{datumrad(n)}<br>{n["meta"].get("ingress", "")}', niva)
 
 # ------------------------------------------------------------------ delar
 PIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>'
@@ -249,15 +260,16 @@ def main():
     shutil.copytree(os.path.join(ROT, 'statiskt'), DIST)
     avd = avdelningar()
     nyheter = sorted(inlagg('nyheter', 'nyheter'), key=lambda x: x['datum'], reverse=True)
-    aktiviteter = sorted(inlagg('aktiviteter', 'aktiviteter'), key=lambda x: x['datum'])
-    kommande = [a for a in aktiviteter if a['datum'] >= IDAG]
+    # Sådant som ska hända (när: i framtiden) visas först, närmast först. Sedan senaste nyheterna.
+    kommande = sorted([n for n in nyheter if n['nar'] and n['nar'] >= IDAG], key=lambda x: x['nar'])
+    ovriga = [n for n in nyheter if n not in kommande]
     sitemap = ['/']
 
     # Startsida
     meta, start = las(os.path.join(INN, 'startsida.html'))
-    if kommande:
-        pg = ''.join(kort(a['meta']['titel'], a['url'], f'<span class="datum">{svdatum(a["datum"])}</span><br>{a["meta"].get("ingress", "")}', 'h3') for a in kommande[:3])
-        pg = f'<section class="bredd sektion pagang" aria-labelledby="pagang"><h2 id="pagang">På gång</h2><ul class="kortlista">{pg}</ul><p><a href="/aktiviteter/">Alla aktiviteter</a></p></section>'
+    if nyheter:
+        pg = ''.join(nyhetskort(n, 'h3') for n in (kommande + ovriga)[:3])
+        pg = f'<section class="bredd sektion pagang" aria-labelledby="pagang"><h2 id="pagang">Nyheter</h2><ul class="kortlista">{pg}</ul><p><a href="/nyheter/">Alla nyheter</a></p></section>'
     else:
         pg = ''
     start = start.replace('<!--PAGANG-->', pg)
@@ -269,7 +281,7 @@ def main():
         bild = f'<img class="toppbild" src="/bilder/{m["bild"]}" alt="{m.get("bild-alt", "")}" width="1600" height="686">' if m.get('bild') else ''
         barnkort = ''.join(kort(b['meta']['titel'], b['url'], b['meta'].get('beskrivning', '')) for b in a['barn'])
         if namn == 'om-klubben':
-            barnkort += kort('Nyheter', '/nyheter/', 'Nytt från klubben och från Sverak.')
+            barnkort += kort('Nyheter', '/nyheter/', 'Nytt från klubben, kommande aktiviteter och nytt från Sverak.')
         undersidor = f'<ul class="kortlista undersidor">{barnkort}</ul>' if barnkort else ''
         kropp = f'''<div class="bredd sida">
 {brodsmulor([("Hem", "/"), (m["titel"], a["url"])])}
@@ -294,54 +306,41 @@ def main():
             if not skyddad:
                 sitemap.append(b['url'])
 
-    # Nyheter
-    lista = ''.join(kort(n['meta']['titel'], n['url'], f'<span class="datum">{svdatum(n["datum"])}</span><br>{n["meta"].get("ingress", "")}') for n in nyheter)
+    # Nyheter (även sådant som ska hända)
+    def lista_html(poster):
+        return '<ul class="kortlista undersidor">' + ''.join(nyhetskort(n) for n in poster) + '</ul>'
+    delar = ''
+    if kommande:
+        delar += '<h2>På gång</h2>' + lista_html(kommande)
+        delar += '<h2>Senaste nyheterna</h2>'
+    delar += lista_html(ovriga) if ovriga else ('' if kommande else '<p class="tom">Inga nyheter just nu.</p>')
     kropp = f'''<div class="bredd sida">
-{brodsmulor([("Hem", "/"), ("Om klubben", "/om-klubben/"), ("Nyheter", "/nyheter/")])}
+{brodsmulor([("Hem", "/"), ("Nyheter", "/nyheter/")])}
 <h1>Nyheter</h1>
-<p class="ingress sida-text">Nytt från klubben och från Sverak.</p>
-{f'<ul class="kortlista undersidor">{lista}</ul>' if lista else '<p class="tom">Inga nyheter just nu.</p>'}
+<p class="ingress sida-text">Nytt från klubben, kommande aktiviteter och nytt från Sverak.</p>
+<p class="sida-text">Vi skickar alltid ut mejl till medlemmarna om aktiviteter, men håll också utkik här. Har du förslag på aktiviteter? Kontakta gärna <a href="mailto:aktivitetsgrupp@solkattenskelleftea.se">aktivitetsgruppen</a>.</p>
+{delar}
 </div>'''
-    skriv('/nyheter/', skal('Nyheter', 'Nytt från Solkatten och från Sverak.', kropp, '/nyheter/', avd))
+    skriv('/nyheter/', skal('Nyheter', 'Nytt från Solkatten, kommande aktiviteter och nytt från Sverak.', kropp, '/nyheter/', avd))
     sitemap.append('/nyheter/')
     for n in nyheter:
+        nar = ''
+        if n['nar']:
+            plats = f' · {n["meta"]["plats"]}' if n['meta'].get('plats') else ''
+            varit = ' · Har redan varit' if n['nar'] < IDAG else ''
+            nar = f'<p class="nar"><strong>När:</strong> <time datetime="{n["nar"].isoformat()}">{svdatum(n["nar"])}</time>{plats}{varit}</p>'
         kropp = f'''<div class="bredd sida">
 {brodsmulor([("Hem", "/"), ("Nyheter", "/nyheter/"), (n["meta"]["titel"], n["url"])])}
 <article class="sida-text">
 <h1>{n["meta"]["titel"]}</h1>
-<p class="datum"><time datetime="{n["datum"].isoformat()}">{svdatum(n["datum"])}</time></p>
+<p class="datum">Publicerad <time datetime="{n["datum"].isoformat()}">{svdatum(n["datum"])}</time></p>
+{nar}
 <p class="ingress">{n["meta"].get("ingress", "")}</p>
 {n["html"]}
 </article>
 </div>'''
         skriv(n['url'], skal(n['meta']['titel'], n['meta'].get('ingress') or text_av(n['html']), kropp, n['url'], avd))
         sitemap.append(n['url'])
-
-    # Aktiviteter
-    lista = ''.join(kort(a['meta']['titel'], a['url'], f'<span class="datum">{svdatum(a["datum"])}{" · " + a["meta"]["plats"] if a["meta"].get("plats") else ""}</span><br>{a["meta"].get("ingress", "")}') for a in kommande)
-    kropp = f'''<div class="bredd sida">
-{brodsmulor([("Hem", "/"), ("Aktiviteter", "/aktiviteter/")])}
-<h1>Aktiviteter</h1>
-<p class="ingress sida-text">Utställningar, föreläsningar och träffar som är på gång i Solkatten.</p>
-<p class="sida-text">Vi skickar alltid ut mejl till medlemmarna om aktiviteter, men håll också utkik här. Återkommande aktiviteter är vår utställning, klubbmästerskapet och Kattens dag. Har du förslag på aktiviteter? Kontakta gärna <a href="mailto:aktivitetsgrupp@solkattenskelleftea.se">aktivitetsgruppen</a>.</p>
-{f'<ul class="kortlista undersidor">{lista}</ul>' if lista else '<p class="tom">Inga aktiviteter är inplanerade just nu. Har du en idé? Mejla <a href="mailto:aktivitetsgrupp@solkattenskelleftea.se">aktivitetsgruppen</a>.</p>'}
-</div>'''
-    skriv('/aktiviteter/', skal('Aktiviteter', 'Utställningar, föreläsningar och träffar i Solkatten.', kropp, '/aktiviteter/', avd))
-    sitemap.append('/aktiviteter/')
-    for a in aktiviteter:
-        passerad = a['datum'] < IDAG
-        kropp = f'''<div class="bredd sida">
-{brodsmulor([("Hem", "/"), ("Aktiviteter", "/aktiviteter/"), (a["meta"]["titel"], a["url"])])}
-<article class="sida-text">
-<h1>{a["meta"]["titel"]}</h1>
-<p class="datum"><time datetime="{a["datum"].isoformat()}">{svdatum(a["datum"])}</time>{" · " + a["meta"]["plats"] if a["meta"].get("plats") else ""}{" · Har redan varit" if passerad else ""}</p>
-<p class="ingress">{a["meta"].get("ingress", "")}</p>
-{a["html"]}
-</article>
-</div>'''
-        skriv(a['url'], skal(a['meta']['titel'], a['meta'].get('ingress') or text_av(a['html']), kropp, a['url'], avd, noindex=passerad))
-        if not passerad:
-            sitemap.append(a['url'])
 
     # 404
     kropp = '''<div class="bredd sida sida-text">
@@ -400,7 +399,7 @@ def main():
         with open(os.path.join(DIST, 'robots.txt'), 'w', encoding='utf-8') as f:
             f.write('User-agent: *\nDisallow: /\n')
         print(f'Länkar börjar med "{BAS or "/"}". Sidan är stängd för Google (noindex och robots.txt).')
-    print(f'Klart! {len(sitemap)} sidor i sitemap, {len(nyheter)} nyheter, {len(kommande)} kommande aktiviteter.')
+    print(f'Klart! {len(sitemap)} sidor i sitemap, {len(nyheter)} nyheter, varav {len(kommande)} på gång.')
     print('Webbplatsen ligger i mappen dist/')
 
 if __name__ == '__main__':

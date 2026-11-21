@@ -26,7 +26,6 @@ Förhandsvisning: https://sarahallgren.github.io/solkatten/
 | `innehall/sidor/<avdelning>/index.html` | Huvudsidorna: Skaffa katt, Kattfakta, Utställning, Medlem, Om klubben, Kontakt |
 | `innehall/sidor/<avdelning>/<sida>.html` | Undersidorna – sidans adress blir `/<avdelning>/<sida>/` |
 | `innehall/nyheter/` | Nyheter, en fil per nyhet |
-| `innehall/aktiviteter/` | Aktiviteter – visas på startsidan och under Aktiviteter tills datumet har passerat |
 | `statiskt/` | Stilmall (`css/stil.css`), meny (`js/meny.js`), bilder, typsnitt och `.htaccess` |
 | `bygg.py` | Bygger ihop allt till `dist/` – menyn och sidfoten finns här |
 | `dist/` | Färdig webbplats som laddas upp. **Ändra aldrig här** – den skrivs över vid varje bygge |
@@ -45,9 +44,19 @@ ingress: En eller två meningar som syns i nyhetslistan.
 <p>Själva texten. Vanlig HTML: <strong>fet</strong>, <a href="/kontakt/">länkar</a>, listor.</p>
 ```
 
-### Lägga in en aktivitet
-Samma sak i `innehall/aktiviteter/`, med `datum:` = dagen då aktiviteten sker och gärna `plats:`.
-Aktiviteten syns på startsidan under *På gång* fram till datumet. Bygg om sidan någon gång efteråt så försvinner den.
+### Något som ska hända (aktivitet)
+Skriv en vanlig nyhet och lägg till `när:` (dagen det händer) och gärna `plats:`:
+```
+<!--
+titel: Kattens dag på Stadsbiblioteket
+datum: 2027-01-20
+när: 2027-02-17
+plats: Stadsbiblioteket, Skellefteå
+ingress: Kom och träffa katter och kattägare.
+-->
+```
+Fram till dagen visas nyheten först på startsidan och under *På gång* på sidan Nyheter.
+Sidan byggs om varje natt, så efteråt hamnar den automatiskt bland de vanliga nyheterna.
 
 ### Ändra en sida
 Öppna filen i `innehall/sidor/…`, ändra texten, bygg om och ladda upp.

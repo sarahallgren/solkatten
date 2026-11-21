@@ -5,6 +5,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Bygg om varje natt, så att det som redan har hänt flyttas ner bland nyheterna
+  schedule:
+    - cron: '17 2 * * *'
 concurrency:
   group: bygg
   cancel-in-progress: false
