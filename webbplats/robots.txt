@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: /medlem/medlemsrabatter/
+Disallow: /medlem/rabattkoder/
 
 Sitemap: https://solkattenskelleftea.se/sitemap.xml
