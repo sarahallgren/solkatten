@@ -1,0 +1,65 @@
+# Solkatten – serverinställningar (one.com, Apache)
+# Spara som UTF-8. Filen ska ligga i webbplatsens rotmapp.
+
+AddDefaultCharset UTF-8
+ErrorDocument 404 /404.html
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Alltid https
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# www -> utan www
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# ---- Gamla adresser (one.com-webbyggaren) -> nya adresser ----
+RewriteRule ^Solkatten/?$                     /om-klubben/om-solkatten/            [R=301,NC,L]
+RewriteRule ^Solkatten/Styrelse/?$            /om-klubben/styrelse/                [R=301,NC,L]
+RewriteRule ^Solkatten/vemskahavad/?$         /kontakt/                            [R=301,NC,L]
+RewriteRule ^Medlemskap/?$                    /medlem/bli-medlem/                  [R=301,NC,L]
+RewriteRule ^Medlemskap/aktiviteter/?$        /aktiviteter/                        [R=301,NC,L]
+RewriteRule ^medlemssida/?$                   /medlem/medlemsrabatter/             [R=301,NC,L]
+RewriteRule ^Uppfödning/?$                    /medlem/ansoka-om/                   [R=301,NC,L]
+RewriteRule ^Uppfödning/Uppfödare/?$          /skaffa-katt/vara-uppfodare/         [R=301,NC,L]
+RewriteRule ^Uppfödning/diplomering/?$        /medlem/ansoka-om/                   [R=301,NC,L]
+RewriteRule "^Uppfödning/Kattungar till salu/?$" /skaffa-katt/kattungar-och-omplacering/ [R=301,NC,L]
+RewriteRule ^Utställning/?$                   /utstallning/                        [R=301,NC,L]
+RewriteRule ^Utställning/hurfungerar/?$       /utstallning/stalla-ut-din-katt/     [R=301,NC,L]
+RewriteRule ^Utställning/b-st-i-norr/?$       /utstallning/bast-i-norr/            [R=301,NC,L]
+RewriteRule ^Utställning/tidigare-utst-llningar/?$ /utstallning/resultat-och-arkiv/ [R=301,NC,L]
+RewriteRule ^Kattskötsel/?$                   /kattfakta/                          [R=301,NC,L]
+RewriteRule "^Kattskötsel/att resa med katt/?$" /kattfakta/resa-med-katt/          [R=301,NC,L]
+RewriteRule ^Kattskötsel/kattungar/?$         /skaffa-katt/checklista-infor-kop/   [R=301,NC,L]
+RewriteRule "^Kattskötsel/kastrering - det bästa för katten/?$" /kattfakta/kastrering/ [R=301,NC,L]
+RewriteRule ^rsm-te-sverak/?$                 /medlem/motion-till-sveraks-arsmote/ [R=301,NC,L]
+RewriteRule ^klubbm-sterskap-2026(/.*)?$      /utstallning/klubbmasterskap/        [R=301,NC,L]
+
+# Adresser från WordPress-testsidan
+RewriteRule ^category/aktiviteter/?$          /aktiviteter/                        [R=301,NC,L]
+RewriteRule ^category/nyheter/?$              /nyheter/                            [R=301,NC,L]
+
+# Lägg till snedstreck sist om det saknas (/kontakt -> /kontakt/)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(.*[^/])$ /$1/ [R=301,L]
+</IfModule>
+
+# Snabbare sida: låt webbläsaren spara bilder, typsnitt och stilmall
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType image/jpeg "access plus 1 month"
+ExpiresByType image/png "access plus 1 month"
+ExpiresByType image/svg+xml "access plus 1 month"
+ExpiresByType font/woff2 "access plus 1 year"
+ExpiresByType text/css "access plus 1 week"
+ExpiresByType application/javascript "access plus 1 week"
+ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/xml text/plain
+</IfModule>
