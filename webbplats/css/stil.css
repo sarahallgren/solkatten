@@ -214,3 +214,16 @@ li{margin:.3em 0}
 @media (min-width:900px){
   .huvudmeny>ul>li:nth-last-child(-n+3) .undermeny{left:auto;right:0}
 }
+
+/* ---------- Tabeller ---------- */
+.sida-text table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:1rem}
+.sida-text th,.sida-text td{text-align:left;vertical-align:top;padding:12px;border-bottom:1px solid var(--kant)}
+.sida-text thead th{background:var(--ljus);border-bottom:2px solid var(--gul)}
+.sida-text tbody th{white-space:nowrap}
+@media (max-width:600px){
+  .sida-text table,.sida-text tbody,.sida-text tr,.sida-text th,.sida-text td{display:block}
+  .sida-text thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .sida-text tr{border:2px solid var(--kant);border-radius:12px;padding:8px 4px;margin-bottom:12px}
+  .sida-text th,.sida-text td{border:0;padding:4px 12px}
+  .sida-text tbody th{white-space:normal;font-size:1.1rem}
+}
