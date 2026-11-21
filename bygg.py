@@ -19,7 +19,7 @@ Varje fil börjar med en informationsruta:
   beskrivning: ...      (kort text på länkkortet och i Google)
   -->
 """
-import os, re, shutil, datetime, html
+import os, re, shutil, datetime, html, hashlib
 
 ROT = os.path.dirname(os.path.abspath(__file__))
 INN = os.path.join(ROT, 'innehall')
@@ -216,6 +216,12 @@ def text_av(html_text, n=155):
     t = html.unescape(re.sub(r'\s+', ' ', t)).strip()
     return (t[:n - 1].rsplit(' ', 1)[0] + '…') if len(t) > n else t
 
+def version(fil):
+    """Kort kontrollsumma, så att webbläsare hämtar ny CSS/JS när filen ändrats."""
+    with open(os.path.join(ROT, 'statiskt', fil), 'rb') as f:
+        return hashlib.md5(f.read()).hexdigest()[:8]
+CSS_V, JS_V = version('css/stil.css'), version('js/meny.js')
+
 def skal(titel, beskrivning, kropp, aktuell, avd, hem=False, noindex=False):
     sidtitel = f'{KLUBB} – {titel}' if hem else f'{titel} – {KLUBB}'
     robots = '\n<meta name="robots" content="noindex">' if noindex else ''
@@ -229,8 +235,8 @@ def skal(titel, beskrivning, kropp, aktuell, avd, hem=False, noindex=False):
 <link rel="canonical" href="{DOMAN}{aktuell}">
 <link rel="icon" href="/bilder/solkatten-logotyp.svg" type="image/svg+xml">
 <link rel="preload" href="/fonter/roboto-serif-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/stil.css">
-<script src="/js/meny.js" defer></script>
+<link rel="stylesheet" href="/css/stil.css?v={CSS_V}">
+<script src="/js/meny.js?v={JS_V}" defer></script>
 </head>
 <body{' class="hem"' if hem else ''}>
 {sidhuvud(avd, aktuell)}
