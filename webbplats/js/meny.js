@@ -17,15 +17,35 @@
       lista.classList.toggle('oppen', !oppen);
     });
   });
-  // Esc stänger allt
+  function stangUndermenyer(utom) {
+    document.querySelectorAll('.undermeny-knapp[aria-expanded="true"]').forEach(function (b) {
+      if (b === utom) return;
+      b.setAttribute('aria-expanded', 'false');
+      document.getElementById(b.getAttribute('aria-controls')).classList.remove('oppen');
+    });
+  }
+  // Bara en undermeny öppen åt gången
+  document.querySelectorAll('.undermeny-knapp').forEach(function (b) {
+    b.addEventListener('click', function () { stangUndermenyer(b); });
+  });
+  // Klick utanför menyn stänger öppna undermenyer
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.huvudmeny')) stangUndermenyer(null);
+  });
+  // Esc stänger den undermeny eller meny man är i och flyttar tillbaka fokus till knappen
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
-    document.querySelectorAll('[aria-expanded="true"]').forEach(function (b) {
-      b.setAttribute('aria-expanded', 'false');
-      var id = b.getAttribute('aria-controls');
-      if (id) document.getElementById(id).classList.remove('oppen');
-    });
-    if (knapp) knapp.focus();
+    var oppenUnder = document.querySelector('.undermeny-knapp[aria-expanded="true"]');
+    if (oppenUnder) {
+      stangUndermenyer(null);
+      oppenUnder.focus();
+      return;
+    }
+    if (knapp && knapp.getAttribute('aria-expanded') === 'true') {
+      knapp.setAttribute('aria-expanded', 'false');
+      meny.classList.remove('oppen');
+      knapp.focus();
+    }
   });
   // Sidhuvudet får vit bakgrund och skugga när man har scrollat
   var huvud = document.querySelector('.sidhuvud');
