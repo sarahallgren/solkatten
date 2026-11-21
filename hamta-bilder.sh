@@ -16,10 +16,6 @@ curl -fsSL "$K/wp-content/uploads/2026/11/katt-topp-utstallning.jpg" -o statiskt
 curl -fsSL "$K/wp-content/uploads/2026/11/katt-topp-fakta.jpg" -o statiskt/bilder/katt-topp-fakta.jpg
 curl -fsSL "$K/wp-content/uploads/2026/11/katt-topp-skaffa.jpg" -o statiskt/bilder/katt-topp-skaffa.jpg
 curl -fsSL "$K/wp-content/uploads/2026/11/katt-kattmamma.jpg" -o statiskt/bilder/katt-kattmamma.jpg
-curl -fsSL "$K/wp-content/uploads/2026/11/katt-kort-medlem.jpg" -o statiskt/bilder/katt-kort-medlem.jpg
-curl -fsSL "$K/wp-content/uploads/2026/11/katt-kort-utstallning.jpg" -o statiskt/bilder/katt-kort-utstallning.jpg
-curl -fsSL "$K/wp-content/uploads/2026/11/katt-kort-rad.jpg" -o statiskt/bilder/katt-kort-rad.jpg
-curl -fsSL "$K/wp-content/uploads/2026/11/katt-kort-skaffa.jpg" -o statiskt/bilder/katt-kort-skaffa.jpg
 curl -fsSL "$K/wp-content/uploads/2026/11/katt-hero.jpg" -o statiskt/bilder/katt-hero.jpg
 curl -fsSL "$K/wp-content/uploads/2026/11/sponsor-4pets.png" -o statiskt/bilder/sponsor-4pets.png
 curl -fsSL "$K/wp-content/uploads/2026/11/sponsor-langford.png" -o statiskt/bilder/sponsor-langford.png

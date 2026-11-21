@@ -59,6 +59,9 @@ def las(fil):
         text = text[m.end():]
     return meta, text.strip()
 
+UTKAST = []   # sidor som inte byggs (utkast: ja) när webbplatsen är öppen för Google
+ATT_GORA = [] # gula påminnelserutor (data-todo) som finns kvar
+
 def avdelningar():
     avd = {}
     for namn in sorted(os.listdir(os.path.join(INN, 'sidor'))):
@@ -69,6 +72,9 @@ def avdelningar():
             if f == 'index.html' or not f.endswith('.html'):
                 continue
             bm, bi = las(os.path.join(mapp, f))
+            if OPPEN_FOR_GOOGLE and bm.get('utkast') == 'ja':
+                UTKAST.append(f'/{namn}/{f[:-5]}/')
+                continue
             slug = f[:-5]
             barn.append({'slug': slug, 'url': f'/{namn}/{slug}/', 'meta': bm, 'html': bi})
         barn.sort(key=lambda b: int(b['meta'].get('ordning', 99)))
@@ -214,6 +220,7 @@ def text_av(html_text, n=155):
     t = re.sub(r'<[^>]+>', ' ', html_text)
     t = re.sub(r'\[[^\]]*\]', '', t)
     t = html.unescape(re.sub(r'\s+', ' ', t)).strip()
+    t = re.sub(r'\s+([.,;:!?)])', r'\1', t)
     return (t[:n - 1].rsplit(' ', 1)[0] + '…') if len(t) > n else t
 
 def version(fil):
@@ -222,7 +229,7 @@ def version(fil):
         return hashlib.md5(f.read()).hexdigest()[:8]
 CSS_V, JS_V = version('css/stil.css'), version('js/meny.js')
 
-def skal(titel, beskrivning, kropp, aktuell, avd, hem=False, noindex=False):
+def skal(titel, beskrivning, kropp, aktuell, avd, hem=False, noindex=False, dela_bild='dela.jpg', extra_head=''):
     sidtitel = f'{KLUBB} – {titel}' if hem else f'{titel} – {KLUBB}'
     robots = '\n<meta name="robots" content="noindex">' if noindex else ''
     return f'''<!doctype html>
@@ -234,6 +241,15 @@ def skal(titel, beskrivning, kropp, aktuell, avd, hem=False, noindex=False):
 <meta name="description" content="{html.escape(beskrivning)}">{robots}
 <link rel="canonical" href="{DOMAN}{aktuell}">
 <link rel="icon" href="/bilder/solkatten-logotyp.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/bilder/ikon-180.png">
+<meta name="theme-color" content="#1C1A17">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="sv_SE">
+<meta property="og:site_name" content="{KLUBB}">
+<meta property="og:title" content="{html.escape(titel)}">
+<meta property="og:description" content="{html.escape(beskrivning)}">
+<meta property="og:url" content="{DOMAN}{aktuell}">
+<meta property="og:image" content="{DOMAN}/bilder/{dela_bild}">{extra_head}
 <link rel="preload" href="/fonter/roboto-serif-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/stil.css?v={CSS_V}">
 <script src="/js/meny.js?v={JS_V}" defer></script>
@@ -262,6 +278,10 @@ def kort(titel, url, text, rubriknivå='h2'):
 
 # ------------------------------------------------------------------ bygg
 def skriv(url, innehall):
+    for m in re.finditer(r'<p data-todo="1">(.*?)</p>', innehall):
+        ATT_GORA.append((url, re.sub(r'<[^>]+>', '', m.group(1))))
+    if OPPEN_FOR_GOOGLE:
+        innehall = re.sub(r'\s*<p data-todo="1">.*?</p>', '', innehall)
     mapp = os.path.join(DIST, url.strip('/'))
     os.makedirs(mapp, exist_ok=True)
     with open(os.path.join(mapp, 'index.html'), 'w', encoding='utf-8') as f:
@@ -286,15 +306,19 @@ def main():
     else:
         pg = ''
     start = start.replace('<!--PAGANG-->', pg)
-    skriv('/', skal(meta['titel'], meta['beskrivning'], start, '/', avd, hem=True))
+    org = ('\n<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization",'
+           f'"name":"{KLUBB}","alternateName":"Solkatten","url":"{DOMAN}/","logo":"{DOMAN}/bilder/ikon-512.png",'
+           '"email":"solkatten@solkattenskelleftea.se","foundingDate":"1990",'
+           '"address":{"@type":"PostalAddress","addressLocality":"Skellefteå","addressCountry":"SE"},'
+           '"memberOf":{"@type":"Organization","name":"Sverak","url":"https://www.sverak.se/"},'
+           '"sameAs":["https://facebook.com/solkattenskelleftea/","https://instagram.com/solkattenskelleftea"]}</script>')
+    skriv('/', skal(meta['titel'], meta['beskrivning'], start, '/', avd, hem=True, extra_head=org))
 
     # Huvudsidor och undersidor
     for namn, a in avd.items():
         m = a['meta']
         bild = f'<img class="toppbild" src="/bilder/{m["bild"]}" alt="{m.get("bild-alt", "")}" width="1600" height="686">' if m.get('bild') else ''
         barnkort = ''.join(kort(b['meta']['titel'], b['url'], b['meta'].get('beskrivning', '')) for b in a['barn'])
-        if namn == 'om-klubben':
-            barnkort += kort('Nyheter', '/nyheter/', 'Nytt från klubben, kommande aktiviteter och nytt från Sverak.')
         undersidor = f'<ul class="kortlista undersidor">{barnkort}</ul>' if barnkort else ''
         kropp = f'''<div class="bredd sida">
 {brodsmulor([("Hem", "/"), (m["titel"], a["url"])])}
@@ -366,7 +390,7 @@ def main():
     with open(os.path.join(DIST, 'sitemap.xml'), 'w', encoding='utf-8') as f:
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
         for u in sitemap:
-            f.write(f'  <url><loc>{DOMAN}{u}</loc><lastmod>{IDAG.isoformat()}</lastmod></url>\n')
+            f.write(f'  <url><loc>{DOMAN}{u}</loc></url>\n')
         f.write('</urlset>\n')
     with open(os.path.join(DIST, 'robots.txt'), 'w', encoding='utf-8') as f:
         f.write(f'User-agent: *\nDisallow: /medlem/rabattkoder/\n\nSitemap: {DOMAN}/sitemap.xml\n')
@@ -410,6 +434,14 @@ def main():
             f.write('User-agent: *\nDisallow: /\n')
         print(f'Länkar börjar med "{BAS or "/"}". Sidan är stängd för Google (noindex och robots.txt).')
     print(f'Klart! {len(sitemap)} sidor i sitemap, {len(nyheter)} nyheter, varav {len(kommande)} på gång.')
+    if UTKAST:
+        print(f'Utkast som inte publicerades ({len(UTKAST)}): ' + ', '.join(UTKAST))
+    if ATT_GORA:
+        print(f'\nKvar att göra ({len(ATT_GORA)} gula rutor):')
+        for url, text in ATT_GORA:
+            print(f'  {url}  {text[:100]}')
+        if OPPEN_FOR_GOOGLE:
+            print('  (Rutorna visas inte på den publicerade sidan.)')
     print('Webbplatsen ligger i mappen dist/')
 
 if __name__ == '__main__':

@@ -15,10 +15,6 @@ Invoke-WebRequest "$K/wp-content/uploads/2026/11/katt-topp-utstallning.jpg" -Out
 Invoke-WebRequest "$K/wp-content/uploads/2026/11/katt-topp-fakta.jpg" -OutFile statiskt\bilder\katt-topp-fakta.jpg
 Invoke-WebRequest "$K/wp-content/uploads/2026/11/katt-topp-skaffa.jpg" -OutFile statiskt\bilder\katt-topp-skaffa.jpg
 Invoke-WebRequest "$K/wp-content/uploads/2026/11/katt-kattmamma.jpg" -OutFile statiskt\bilder\katt-kattmamma.jpg
-Invoke-WebRequest "$K/wp-content/uploads/2026/11/katt-kort-medlem.jpg" -OutFile statiskt\bilder\katt-kort-medlem.jpg
-Invoke-WebRequest "$K/wp-content/uploads/2026/11/katt-kort-utstallning.jpg" -OutFile statiskt\bilder\katt-kort-utstallning.jpg
-Invoke-WebRequest "$K/wp-content/uploads/2026/11/katt-kort-rad.jpg" -OutFile statiskt\bilder\katt-kort-rad.jpg
-Invoke-WebRequest "$K/wp-content/uploads/2026/11/katt-kort-skaffa.jpg" -OutFile statiskt\bilder\katt-kort-skaffa.jpg
 Invoke-WebRequest "$K/wp-content/uploads/2026/11/katt-hero.jpg" -OutFile statiskt\bilder\katt-hero.jpg
 Invoke-WebRequest "$K/wp-content/uploads/2026/11/sponsor-4pets.png" -OutFile statiskt\bilder\sponsor-4pets.png
 Invoke-WebRequest "$K/wp-content/uploads/2026/11/sponsor-langford.png" -OutFile statiskt\bilder\sponsor-langford.png

@@ -37,6 +37,9 @@ RewriteRule ^Kattskötsel/kattungar/?$         /skaffa-katt/checklista-infor-kop
 RewriteRule "^Kattskötsel/kastrering - det bästa för katten/?$" /kattfakta/kastrering/ [R=301,NC,L]
 RewriteRule ^rsm-te-sverak/?$                 /medlem/motion-till-sveraks-arsmote/ [R=301,NC,L]
 RewriteRule ^klubbm-sterskap-2026(/.*)?$      /utstallning/klubbmasterskap/        [R=301,NC,L]
+RewriteRule ^Utställning/catshow26/?$         /utstallning/kommande-utstallning/   [R=301,NC,L]
+# Gamla dokument
+RewriteRule "^onewebmedia/Solkattens stadgar\.pdf$" /dokument/solkattens-stadgar.pdf  [R=301,NC,L]
 
 # Adresser från WordPress-testsidan
 RewriteRule ^category/aktiviteter/?$          /nyheter/                            [R=301,NC,L]
@@ -49,15 +52,25 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^(.*[^/])$ /$1/ [R=301,L]
 </IfModule>
 
-# Snabbare sida: låt webbläsaren spara bilder, typsnitt och stilmall
+# Säkerhet
+<IfModule mod_headers.c>
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# Snabbare sida: låt webbläsaren spara bilder, typsnitt och stilmall.
+# CSS och JS har versionsnummer i adressen, så de kan sparas länge.
 <IfModule mod_expires.c>
 ExpiresActive On
 ExpiresByType image/jpeg "access plus 1 month"
 ExpiresByType image/png "access plus 1 month"
 ExpiresByType image/svg+xml "access plus 1 month"
 ExpiresByType font/woff2 "access plus 1 year"
-ExpiresByType text/css "access plus 1 week"
-ExpiresByType application/javascript "access plus 1 week"
+ExpiresByType text/css "access plus 1 year"
+ExpiresByType application/javascript "access plus 1 year"
+ExpiresByType text/javascript "access plus 1 year"
+ExpiresByType application/pdf "access plus 1 month"
 ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
 

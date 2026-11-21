@@ -135,8 +135,17 @@ li{margin:.3em 0}
 .fot-sist{font-size:.9rem;color:#B8B3AC;margin:0}
 
 /* ---------- Mobil ---------- */
-/* Menyknappen används upp till 1150 px, så att menyn aldrig blir för trång */
-@media (max-width:1150px){
+/* Kompaktare meny på mindre datorskärmar och i "datorvy" i mobilen */
+@media (max-width:1240px){
+  .sidhuvud-inre{gap:16px}
+  .logga img{width:80px}
+  .huvudmeny>ul{gap:4px 2px}
+  .huvudmeny a{padding:0 7px;font-size:1rem}
+  .undermeny-knapp{width:26px;margin-left:-6px}
+  .huvudmeny .kontakt-knapp{padding:0 16px;margin-left:6px}
+}
+/* Menyknappen används bara när hela menyn inte får plats */
+@media (max-width:899px){
   .meny-knapp{display:inline-flex}
   .huvudmeny{display:none;position:absolute;left:0;right:0;top:100%;background:var(--vit);color:var(--text);padding:8px 24px 24px;box-shadow:0 12px 24px rgba(28,26,23,.15);max-height:calc(100vh - 120px);overflow:auto}
   .huvudmeny.oppen{display:block}
@@ -200,3 +209,8 @@ li{margin:.3em 0}
 .foto-info{font-size:.95rem;color:var(--dampad)}
 .arkiv li{margin-bottom:8px}
 .sida-text .vinnare{max-width:none}
+
+/* Undermenyerna längst till höger öppnas åt vänster så att de inte hamnar utanför skärmen */
+@media (min-width:900px){
+  .huvudmeny>ul>li:nth-last-child(-n+3) .undermeny{left:auto;right:0}
+}

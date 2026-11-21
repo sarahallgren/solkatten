@@ -62,6 +62,10 @@ Sidan byggs om varje natt, så efteråt hamnar den automatiskt bland de vanliga 
 Öppna filen i `innehall/sidor/…`, ändra texten, bygg om och ladda upp.
 Gula rutor med `data-todo="1"` är påminnelser om text som saknas – ta bort hela stycket när texten är på plats.
 
+### Sidor som inte är klara (utkast)
+Skriv `utkast: ja` i informationsrutan överst. Sidan syns i förhandsvisningen men publiceras inte när webbplatsen är öppen för Google.
+Gula påminnelserutor (`data-todo`) visas bara i förhandsvisningen. Efter varje bygge listas de som *Kvar att göra*.
+
 ### Ny undersida
 Skapa en ny fil i rätt avdelningsmapp, till exempel `innehall/sidor/kattfakta/pälsvård.html` – men använd bara a–z, siffror och bindestreck i filnamnet (`palsvard.html`).
 `ordning:` bestämmer platsen i menyn och `beskrivning:` blir texten på länkkortet. Menyn och länkkorten uppdateras automatiskt.
