@@ -309,11 +309,8 @@ def main():
     # Nyheter (även sådant som ska hända)
     def lista_html(poster):
         return '<ul class="kortlista undersidor">' + ''.join(nyhetskort(n) for n in poster) + '</ul>'
-    delar = ''
-    if kommande:
-        delar += '<h2>På gång</h2>' + lista_html(kommande)
-        delar += '<h2>Senaste nyheterna</h2>'
-    delar += lista_html(ovriga) if ovriga else ('' if kommande else '<p class="tom">Inga nyheter just nu.</p>')
+    # En enda lista: det som ska hända först, sedan övriga nyheter, nyast först
+    delar = lista_html(kommande + ovriga) if nyheter else '<p class="tom">Inga nyheter just nu.</p>'
     kropp = f'''<div class="bredd sida">
 {brodsmulor([("Hem", "/"), ("Nyheter", "/nyheter/")])}
 <h1>Nyheter</h1>

@@ -55,7 +55,7 @@ plats: Stadsbiblioteket, Skellefteå
 ingress: Kom och träffa katter och kattägare.
 -->
 ```
-Fram till dagen visas nyheten först på startsidan och under *På gång* på sidan Nyheter.
+Fram till dagen visas nyheten först i listan, både på startsidan och på sidan Nyheter.
 Sidan byggs om varje natt, så efteråt hamnar den automatiskt bland de vanliga nyheterna.
 
 ### Ändra en sida
