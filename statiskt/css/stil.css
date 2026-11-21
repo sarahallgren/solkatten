@@ -155,6 +155,7 @@ li{margin:.3em 0}
   body{font-size:1.05rem}
   .gul-ruta{padding:28px 22px}
   .logga img{width:80px}
+  .sidfot-kolumner{grid-template-columns:1fr}
 }
 
 /* ---------- Sidhuvudet följer med vid scroll (dator) ---------- */
