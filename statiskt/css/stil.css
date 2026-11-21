@@ -156,3 +156,15 @@ li{margin:.3em 0}
   .gul-ruta{padding:28px 22px}
   .logga img{width:80px}
 }
+
+/* ---------- Sidhuvudet följer med vid scroll (dator) ---------- */
+@media (min-width:961px){
+  .sidhuvud{position:sticky;top:0;transition:background-color .2s,box-shadow .2s,color .2s}
+  .hem .sidhuvud{position:fixed}
+  .sidhuvud.rullad{background:var(--vit);color:var(--text);box-shadow:0 4px 16px rgba(28,26,23,.12)}
+  .hem .sidhuvud.rullad .logga img{filter:none}
+  .sidhuvud.rullad .sidhuvud-inre{padding-block:8px}
+  /* Rubriker och fokus ska inte hamna bakom sidhuvudet */
+  html{scroll-padding-top:110px}
+}
+@media (prefers-reduced-motion:reduce){.sidhuvud{transition:none}}
