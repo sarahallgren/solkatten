@@ -54,8 +54,8 @@ c.setAuthor('Solkatten Skellefteå kattklubb')
 c.setSubject('Utskrivbart medlemskort i kreditkortsstorlek')
 B, H = 85.6 * mm, 54 * mm
 sw, sh = A4
-x0 = (sw - 2 * B) / 2
-y0 = sh - 40 * mm - 70 * mm - H
+x0 = 25 * mm
+y0 = sh - 80 * mm - H
 
 # Instruktioner
 c.setFillColor(MORK)
@@ -65,76 +65,62 @@ c.setFont('Brod', 11)
 rader = [
     '1. Skriv ditt namn och medlemsnummer i fälten på kortet (eller för hand efter utskrift).',
     '2. Skriv ut i verklig storlek (100 %). Välj inte "Anpassa till sida".',
-    '3. Klipp ut längs den yttre linjen och vik på den streckade mittlinjen.',
-    '4. Tejpa ihop eller laminera. Visa kortet i butiken för att få rabatten.',
+    '3. Klipp ut kortet längs den tunna grå linjen.',
+    '4. Laminera gärna. Visa kortet i butiken för att få rabatten.',
 ]
 for i, r in enumerate(rader):
     c.drawString(x0, sh - 42 * mm - i * 6.5 * mm, r)
 
-# ---- Framsida (vänster) ----
+# ---- Kortet: en sida, vit bakgrund, gul rand ----
 c.saveState()
 klipp = c.beginPath()
-klipp.roundRect(x0, y0, 2 * B, H, 3 * mm)
+klipp.roundRect(x0, y0, B, H, 3 * mm)
 c.clipPath(klipp, stroke=0, fill=0)
-c.setFillColor(MORK)
-c.rect(x0, y0, B, H, stroke=0, fill=1)
 c.setFillColor(GUL)
-c.rect(x0, y0, B, 2.2 * mm, stroke=0, fill=1)
-lh = 30 * mm
-c.drawImage(vit_p, x0 + 6 * mm, y0 + (H - lh) / 2 + 2 * mm, width=lh * 253.75 / 263.75, height=lh, mask='auto')
-tx = x0 + 42 * mm
-c.setFillColor(GUL)
-c.setFont('BrodFet', 7.5)
-c.drawString(tx, y0 + 38 * mm, 'MEDLEMSKORT')
-c.setFont('Rubrik', 40)
-c.drawString(tx, y0 + 24 * mm, AR)
-c.setFillColor(white)
-c.setFont('BrodFet', 8)
-c.drawString(tx, y0 + 15 * mm, 'Solkatten')
-c.setFont('Brod', 7)
-c.drawString(tx, y0 + 11 * mm, 'Skellefteå kattklubb')
-
-# ---- Baksida (höger) ----
-bx = x0 + B
-c.setFillColor(white)
-c.rect(bx, y0, B, H, stroke=0, fill=1)
-c.setFillColor(GUL)
-c.rect(bx, y0 + H - 2.2 * mm, B, 2.2 * mm, stroke=0, fill=1)
+c.rect(x0, y0 + H - 3 * mm, B, 3 * mm, stroke=0, fill=1)
 c.restoreState()
-pad = 6 * mm
+
+pad = 5 * mm
+lh = 19 * mm
+c.drawImage(svart_liten, x0 + pad, y0 + 29 * mm, width=lh * 253.75 / 263.75, height=lh, mask='auto')
+tx = x0 + 31 * mm
 c.setFillColor(DAMPAD)
-c.setFont('BrodFet', 6.5)
-c.drawString(bx + pad, y0 + 44 * mm, 'NAMN')
-c.drawString(bx + pad, y0 + 30 * mm, 'MEDLEMSNUMMER')
+c.setFont('BrodFet', 7)
+c.drawString(tx, y0 + 43 * mm, 'MEDLEMSKORT')
+c.setFillColor(MORK)
+c.setFont('Rubrik', 30)
+c.drawString(tx, y0 + 33 * mm, AR)
+c.setFont('Brod', 7)
+c.drawString(tx, y0 + 28.5 * mm, 'Solkatten Skellefteå kattklubb')
+
+c.setFillColor(DAMPAD)
+c.setFont('BrodFet', 6)
+c.drawString(x0 + pad, y0 + 23.5 * mm, 'NAMN')
+c.drawString(x0 + pad, y0 + 12.5 * mm, 'MEDLEMSNUMMER')
+c.drawString(x0 + 47 * mm, y0 + 12.5 * mm, 'GILTIGT TILL OCH MED')
 c.setStrokeColor(KANT)
 c.setLineWidth(0.5)
-for yy in (37 * mm, 23 * mm):
-    c.line(bx + pad, y0 + yy, bx + B - pad, y0 + yy)
-form = c.acroForm
-form.textfield(name='namn', tooltip='Namn', x=bx + pad, y=y0 + 37.5 * mm, width=B - 2 * pad, height=5.5 * mm,
-               fontName='Helvetica-Bold', fontSize=10, borderWidth=0, fillColor=white, textColor=MORK, forceBorder=False)
-form.textfield(name='medlemsnummer', tooltip='Medlemsnummer', x=bx + pad, y=y0 + 23.5 * mm, width=B - 2 * pad, height=5.5 * mm,
-               fontName='Helvetica-Bold', fontSize=10, borderWidth=0, fillColor=white, textColor=MORK, forceBorder=False)
+c.line(x0 + pad, y0 + 16.5 * mm, x0 + B - pad, y0 + 16.5 * mm)
+c.line(x0 + pad, y0 + 6.5 * mm, x0 + 42 * mm, y0 + 6.5 * mm)
 c.setFillColor(MORK)
-c.setFont('BrodFet', 8)
-c.drawString(bx + pad, y0 + 14 * mm, f'Giltigt till och med 31 december {AR}')
+c.setFont('BrodFet', 8.5)
+c.drawString(x0 + 47 * mm, y0 + 7.5 * mm, f'31 december {AR}')
+form = c.acroForm
+form.textfield(name='namn', tooltip='Namn', x=x0 + pad, y=y0 + 17 * mm, width=B - 2 * pad, height=5.5 * mm,
+               fontName='Helvetica-Bold', fontSize=10, borderWidth=0, fillColor=white, textColor=MORK, forceBorder=False)
+form.textfield(name='medlemsnummer', tooltip='Medlemsnummer', x=x0 + pad, y=y0 + 7 * mm, width=37 * mm, height=5 * mm,
+               fontName='Helvetica-Bold', fontSize=10, borderWidth=0, fillColor=white, textColor=MORK, forceBorder=False)
 c.setFillColor(DAMPAD)
-c.setFont('Brod', 6.5)
-c.drawString(bx + pad, y0 + 9.5 * mm, 'Ansluten till Sverak och FIFe')
-c.drawString(bx + pad, y0 + 5.5 * mm, 'solkattenskelleftea.se')
-c.drawImage(svart_liten, bx + B - pad - 11 * mm, y0 + 4 * mm, width=11 * mm * 253.75 / 263.75, height=11 * mm, mask='auto')
+c.setFont('Brod', 5.5)
+c.drawString(x0 + pad, y0 + 2.6 * mm, 'Ansluten till Sverak och FIFe  ·  solkattenskelleftea.se')
 
-# Klipp- och viklinjer
+# Klipplinje
 c.setStrokeColor(KANT)
 c.setLineWidth(0.4)
-c.roundRect(x0, y0, 2 * B, H, 3 * mm, stroke=1, fill=0)
-c.setDash(2, 2)
-c.line(x0 + B, y0 - 4 * mm, x0 + B, y0 + H + 4 * mm)
-c.setDash()
+c.roundRect(x0, y0, B, H, 3 * mm, stroke=1, fill=0)
 c.setFillColor(DAMPAD)
 c.setFont('Brod', 8)
-c.drawCentredString(x0 + B, y0 + H + 6 * mm, 'vik här')
-c.drawString(x0, y0 - 8 * mm, 'Klipp längs den yttre linjen')
+c.drawString(x0, y0 - 6 * mm, 'Klipp längs den grå linjen')
 c.showPage()
 c.save()
 print('Klart:', ut)
