@@ -21,6 +21,7 @@ jobs:
       - name: Hämta bilder och typsnitt om de saknas
         run: |
           if [ ! -f statiskt/bilder/katt-hero.jpg ] || [ ! -f statiskt/fonter/manrope.woff2 ]; then sh hamta-bilder.sh; fi
+          if [ ! -f statiskt/dokument/solkattens-stadgar.pdf ] || [ ! -f statiskt/bilder/km2026/basta-svans.jpg ]; then sh hamta-gamla-filer.sh; fi
       - name: Bygg den färdiga webbplatsen (för one.com)
         run: |
           python bygg.py
@@ -30,7 +31,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add statiskt/bilder statiskt/fonter webbplats medlemssida
+          git add statiskt/bilder statiskt/fonter statiskt/dokument webbplats medlemssida
           if git diff --cached --quiet; then echo "Inget nytt att spara"; else git commit -m "Uppdatera färdig webbplats och bilder [skip ci]" && git push; fi
       - name: Bygg förhandsvisningen (GitHub Pages)
         run: BAS="/${{ github.event.repository.name }}" python bygg.py

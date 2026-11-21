@@ -323,6 +323,7 @@ def main():
 {brodsmulor([("Hem", "/"), ("Aktiviteter", "/aktiviteter/")])}
 <h1>Aktiviteter</h1>
 <p class="ingress sida-text">Utställningar, föreläsningar och träffar som är på gång i Solkatten.</p>
+<p class="sida-text">Vi skickar alltid ut mejl till medlemmarna om aktiviteter, men håll också utkik här. Återkommande aktiviteter är vår utställning, klubbmästerskapet och Kattens dag. Har du förslag på aktiviteter? Kontakta gärna <a href="mailto:aktivitetsgrupp@solkattenskelleftea.se">aktivitetsgruppen</a>.</p>
 {f'<ul class="kortlista undersidor">{lista}</ul>' if lista else '<p class="tom">Inga aktiviteter är inplanerade just nu. Har du en idé? Mejla <a href="mailto:aktivitetsgrupp@solkattenskelleftea.se">aktivitetsgruppen</a>.</p>'}
 </div>'''
     skriv('/aktiviteter/', skal('Aktiviteter', 'Utställningar, föreläsningar och träffar i Solkatten.', kropp, '/aktiviteter/', avd))

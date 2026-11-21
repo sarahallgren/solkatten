@@ -179,3 +179,20 @@ li{margin:.3em 0}
 .forman-kod{font-family:ui-monospace,Consolas,monospace;font-size:1.25rem;font-weight:700;background:var(--ljus);border:2px dashed var(--gul);border-radius:8px;padding:6px 12px;align-self:flex-start;user-select:all}
 .tagg{align-self:flex-start;margin-top:6px!important;background:var(--gul);color:var(--mork);font-size:.9rem;font-weight:700;border-radius:999px;padding:2px 12px}
 .sida-text .formaner{max-width:none}
+
+/* ---------- Uppfödarlista ---------- */
+.uppfodare{list-style:none;padding:0;display:grid;gap:12px}
+.uppfodare li{border-left:4px solid var(--gul);padding:4px 0 4px 16px;margin:0}
+.tagg-inline{display:inline-block;background:var(--gul);color:var(--mork);font-size:.8rem;font-weight:700;border-radius:999px;padding:1px 10px;vertical-align:middle}
+
+/* ---------- Vinnare och arkiv ---------- */
+.vinnare-stor{margin:24px 0;max-width:420px}
+.vinnare-stor img{border-radius:16px;width:100%;height:auto}
+.vinnare-stor figcaption{margin-top:8px}
+.vinnare{list-style:none;padding:0;margin:0 0 32px;display:grid;grid-template-columns:repeat(auto-fill,minmax(13rem,1fr));gap:20px}
+.vinnare li{margin:0}
+.vinnare img{border-radius:12px;width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--ljus)}
+.vinnare p{margin:8px 0 0;font-size:1rem}
+.foto-info{font-size:.95rem;color:var(--dampad)}
+.arkiv li{margin-bottom:8px}
+.sida-text .vinnare{max-width:none}
