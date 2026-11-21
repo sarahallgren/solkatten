@@ -25,6 +25,7 @@ jobs:
         run: |
           if [ ! -f statiskt/bilder/katt-hero.jpg ] || [ ! -f statiskt/fonter/manrope.woff2 ]; then sh hamta-bilder.sh; fi
           if [ ! -f statiskt/dokument/solkattens-stadgar.pdf ] || [ ! -f statiskt/bilder/km2026/basta-svans.jpg ]; then sh hamta-gamla-filer.sh; fi
+          if [ ! -f statiskt/bilder/km2026/mingel/mingel-37.jpg ]; then sh hamta-mingelbilder.sh; fi
       - name: Bygg den färdiga webbplatsen (för one.com)
         run: |
           python bygg.py

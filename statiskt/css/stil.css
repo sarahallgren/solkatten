@@ -227,3 +227,11 @@ li{margin:.3em 0}
   .sida-text th,.sida-text td{border:0;padding:4px 12px}
   .sida-text tbody th{white-space:normal;font-size:1.1rem}
 }
+
+/* ---------- Bildgalleri ---------- */
+.galleri{list-style:none;padding:0;margin:0 0 32px;display:grid;grid-template-columns:repeat(auto-fill,minmax(10rem,1fr));gap:10px}
+.galleri li{margin:0}
+.galleri a{display:block;border-radius:10px;overflow:hidden}
+.galleri img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--ljus);transition:transform .2s}
+.galleri a:hover img{transform:scale(1.04)}
+.sida-text .galleri{max-width:none}
