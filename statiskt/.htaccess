@@ -33,7 +33,7 @@ RewriteRule ^Utställning/b-st-i-norr/?$       /utstallning/bast-i-norr/        
 RewriteRule ^Utställning/tidigare-utst-llningar/?$ /utstallning/resultat-och-arkiv/ [R=301,NC,L]
 RewriteRule ^Kattskötsel/?$                   /kattfakta/                          [R=301,NC,L]
 RewriteRule "^Kattskötsel/att resa med katt/?$" /kattfakta/resa-med-katt/          [R=301,NC,L]
-RewriteRule ^Kattskötsel/kattungar/?$         /skaffa-katt/checklista-infor-kop/   [R=301,NC,L]
+RewriteRule ^Kattskötsel/kattungar/?$         /skaffa-katt/kattungar/              [R=301,NC,L]
 RewriteRule "^Kattskötsel/kastrering - det bästa för katten/?$" /kattfakta/kastrering/ [R=301,NC,L]
 RewriteRule ^rsm-te-sverak/?$                 /medlem/motion-till-sveraks-arsmote/ [R=301,NC,L]
 RewriteRule ^klubbm-sterskap-2026(/.*)?$      /utstallning/klubbmasterskap/        [R=301,NC,L]
