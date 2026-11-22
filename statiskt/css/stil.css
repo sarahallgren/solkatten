@@ -235,3 +235,7 @@ li{margin:.3em 0}
 .galleri img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--ljus);transition:transform .2s}
 .galleri a:hover img{transform:scale(1.04)}
 .sida-text .galleri{max-width:none}
+
+/* ---------- Startsidans rubrik ---------- */
+.overrubrik{font-weight:700;font-size:1rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gul);margin:0 0 12px}
+.h1-rad2{display:block;color:var(--gul)}
