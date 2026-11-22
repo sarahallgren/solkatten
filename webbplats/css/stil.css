@@ -240,3 +240,5 @@ li{margin:.3em 0}
 .overrubrik{font-weight:700;font-size:1rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gul);margin:0 0 12px}
 .h1-rad2{display:block;color:var(--gul)}
 @media (max-width:960px){.tva-kolumner{gap:24px}}
+.forklaring{white-space:nowrap}
+@media (max-width:600px){.forklaring{white-space:normal}}
