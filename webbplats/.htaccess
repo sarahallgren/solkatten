@@ -43,6 +43,7 @@ RewriteRule "^onewebmedia/Solkattens stadgar\.pdf$" /dokument/solkattens-stadgar
 
 # Adresser från WordPress-testsidan
 RewriteRule ^category/aktiviteter/?$          /nyheter/                            [R=301,NC,L]
+RewriteRule ^medlem/fornya-medlemskap/?$        /medlem/bli-medlem/                  [R=301,NC,L]
 RewriteRule ^aktiviteter(/.*)?$                /nyheter/                            [R=301,NC,L]
 RewriteRule ^category/nyheter/?$              /nyheter/                            [R=301,NC,L]
 
