@@ -167,7 +167,7 @@ SIDFOT = f'''<footer class="sidfot">
         <h2 class="fot-rubrik">För medlemmar</h2>
         <ul>
           <li><a href="/medlem/bli-medlem/">Bli medlem</a></li>
-          <li><a href="/medlem/fornya-medlemskap/">Förnya medlemskap</a></li>
+          <li><a href="/medlem/bli-medlem/#fornya">Förnya medlemskap</a></li>
           <li><a href="/medlem/rabattkoder/">Logga in för medlemmar</a></li>
           <li><a href="/medlem/ansoka-om/">Ansöka om stamnamn, kull m.m.</a></li>
         </ul>
